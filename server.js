@@ -25,9 +25,9 @@ function getWinner(gameboard, current) {
 		return true
 	} else if (gameboard[6] == current && gameboard[4] == current && gameboard[2] == current) {
 		return true
-	} else {
-		return false
-	}
+	} 
+	return false
+
 }
 
 function printBoard(board) {
@@ -35,7 +35,7 @@ function printBoard(board) {
 	string += `\n-----`;
 	string += `\n${board[3]}|${board[4]}|${board[5]}`;
 	string += `\n-----`;
-	string += `\n${board[6]}|${board[7]}|${board[8]}`;
+	string += `\n${board[6]}|${board[7]}|${board[8]}\n\n\n`;
 	return string
 }
 
@@ -73,10 +73,15 @@ let count = 0;
 let restart = false
 
 function playerMove(firstPlayer, secondPlayer, current, value) {
-	if (currentValue(value) == true) {
+	if(clients.length === 2) {
+		if (currentValue(value) == true) {
 		if (restart) {
 			count = 1;
 			gameboard = [...startboard];
+			current.write(`${current} You are win!\n`)
+			currentSecond.write(`${currentSecond} you are lose\n`)
+			current.write(`${printBoard(gameboard)}${current}: ${value}\n`)
+			currentSecond.write(`${$printBoard(gameboard)}${current}: ${value}\n`)
 			currentSecond = current
 			current = current;
 			restart = true;
@@ -84,32 +89,33 @@ function playerMove(firstPlayer, secondPlayer, current, value) {
 
 		if (currentSecond = current) {
 			if (move(gameboard, current, value) == true) {
-				let gameboard = [...startboard]
 				firstPlayer.write(`${printBoard(gameboard)}`)
 				secondPlayer.write(`${printBoard(gameboard)}`)
 				count++
-				if (getWinner(gameboard, current) || count < 9) {
-					if (getWinner) {
-						firstPlayer.write(`Flawless victory `)
-						secondPlayer.write(`Oops! You are lose =()`)
+				if (getWinner(gameboard, current) || count > 9) {
+					if (getWinner(gameboard, current)) {
+						firstPlayer.write(`Flawless victory \n`)
+						current = selector(current)
+						secondPlayer.write(`Oops! You are lose =(\n`)
 						restart = true
 					} else {
-						firstPlayer.write(`nobody won`);
-						secondPlayer.write(`nobody won`)
+						firstPlayer.write(`nobody won\n`);
+						secondPlayer.write(`nobody won\n`)
 					}
 				} else {
-					currentSecond = toggle(current);
-					secondPlayer.write(`Your turn ${currentSecond}: `);
+					currentSecond = selector(currentSecond);
+					secondPlayer.write(`Your turn ${currentSecond}: \n`);
 				}
 			} else {
-				firstPlayer.write(`This cell is not empty!`)
+				firstPlayer.write(`${printBoard(gameboard)}\n`)
 			}
 		} else {
-			firstPlayer.write(`please wait for second player is turn!`)
+			firstPlayer.write(`please wait for second player is turn!\n`)
 		}
 	} else {
-		firstPlayer.write(`Please enter valid value from!`)
+		firstPlayer.write(`Please enter valid value from!\n`)
 	}
+} else restart = true;
 }
 
 
